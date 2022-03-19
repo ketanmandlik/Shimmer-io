@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
+import { changeType } from "../Redux/actions/app.style";
 
 function GeneratedOutputCSS(props) {
-  const { appStyle } = props;
+  const { appStyle, changeType } = props;
   const [noOutput, setNoOutput] = React.useState("");
   const [skeletonValue, setSkeletonValue] = React.useState(`
     .skeleton {
@@ -20,7 +21,19 @@ function GeneratedOutputCSS(props) {
           opacity: ${appStyle.OBJECT_OPACITY}%;
       }
         `
-          : noOutput
+          : `
+          .skeleton-text {
+            width: ${appStyle.OBJECT_WIDTH}%;
+            height: 0.5rem;
+            margin-bottom: 0.25rem;
+            border-radius: 0.125rem;
+            opacity:${appStyle.OBJECT_OPACITY}%;
+          }
+          .skeleton-text:last-child {
+            margin-bottom: 0;
+            width: ${appStyle.OBJECT_WIDTH - 20}%;
+          }
+          `
       }
 
     @keyframes skeleton-loading {
@@ -33,6 +46,25 @@ function GeneratedOutputCSS(props) {
       }
 
     `);
+
+  const [skeletonValueHTML, setSkeletonValueHTML] = React.useState(`
+  ${
+    appStyle.SELECTED_OBJECT === "TEXT"
+      ? `
+  <span class="skeleton skeleton-text">
+    TEXT COMES AFTER LOADING...
+  </span>
+  <span class="skeleton skeleton-text">
+    TEXT COMES AFTER LOADING...
+  </span>
+  <span class="skeleton skeleton-text">
+    TEXT COMES AFTER LOADING...
+  </span>
+  `
+      : `<img src="IMAGE COME AFTER LOADING..." 
+          class="skeleton skeleton-object" />`
+  }
+  `);
 
   const [isCopied, setIsCopied] = React.useState(false);
 
@@ -74,25 +106,21 @@ function GeneratedOutputCSS(props) {
         opacity: ${appStyle.OBJECT_OPACITY}%;
     }
       `
-        : noOutput
+        : `
+        .skeleton-text {
+          width: ${appStyle.OBJECT_WIDTH}%;
+          height: 0.5rem;
+          margin-bottom: 0.25rem;
+          border-radius: 0.125rem;
+          opacity:${appStyle.OBJECT_OPACITY}%;
+        }
+        .skeleton-text:last-child {
+          margin-bottom: 0;
+          width: ${appStyle.OBJECT_WIDTH - 20}%;
+        }
+        `
     }
-    ${
-      appStyle.SELECTED_OBJECT === "TEXT"
-        ? `
-      .skeleton-text {
-        width: ${appStyle.OBJECT_WIDTH}%;
-        height: 0.5rem;
-        margin-bottom: 0.25rem;
-        border-radius: 0.125rem;
-        opacity:${appStyle.OBJECT_OPACITY}%;
-      }
-      .skeleton-text:last-child {
-        margin-bottom: 0;
-        width: ${appStyle.OBJECT_WIDTH - 20}%;
-      }
-      `
-        : noOutput
-    }
+    
     @keyframes skeleton-loading {
         0% {
           background-color: hsl(200, 20%, 70%);
@@ -102,14 +130,68 @@ function GeneratedOutputCSS(props) {
         }
       }
       `);
+  }, [appStyle, noOutput]);
+
+  useEffect(() => {
+    setSkeletonValueHTML(`
+    ${
+      appStyle.SELECTED_OBJECT === "TEXT"
+        ? `
+      <span class="skeleton skeleton-text">
+        TEXT COMES AFTER LOADING...
+      </span>
+      <span class="skeleton skeleton-text">
+        TEXT COMES AFTER LOADING...
+      </span>
+      <span class="skeleton skeleton-text">
+        TEXT COMES AFTER LOADING...
+      </span>
+    `
+        : `<img src="IMAGE COME AFTER LOADING..." 
+            class="skeleton skeleton-object" />
+            `
+    }
+    `);
   }, [appStyle]);
 
   return (
     <Container isCopied={isCopied}>
-      <div style={{ display: "flex", justifyContent: "flex-end" }}>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div>
+          {/* <button onClick={() => changeType("CSS")}>CSS</button>
+          <button onClick={() => changeType("HTML")}>HTML</button> */}
+          <RadioInput
+            appStyle={appStyle}
+            className="me-2"
+            type="radio"
+            value="CSS"
+            checked={appStyle.SELECTED_TYPE === "CSS"}
+            onChange={() => changeType("CSS")}
+          />
+          <TypeText className="me-2" appStyle={appStyle}>
+            CSS
+          </TypeText>
+          <RadioInput
+            appStyle={appStyle}
+            className="me-2"
+            type="radio"
+            value="HTML"
+            checked={appStyle.SELECTED_TYPE === "HTML"}
+            onChange={() => changeType("HTML")}
+          />
+          <TypeText className="me-2" appStyle={appStyle}>
+            HTML
+          </TypeText>
+        </div>
         <CopyToClipboardButton
           className="btn btn-success"
-          onClick={() => handleCopyClick(skeletonValue)}
+          onClick={() => {
+            handleCopyClick(
+              appStyle.SELECTED_TYPE === "CSS"
+                ? skeletonValue
+                : skeletonValueHTML
+            );
+          }}
         >
           <span style={{ fontSize: "14px" }}>
             {isCopied ? "Copied" : "Copy"}
@@ -117,12 +199,21 @@ function GeneratedOutputCSS(props) {
         </CopyToClipboardButton>
       </div>
 
-      <CssTextArea
-        appStyle={appStyle}
-        value={skeletonValue}
-        contentEditable={false}
-        disabled={true}
-      ></CssTextArea>
+      {appStyle.SELECTED_TYPE === "CSS" ? (
+        <CssTextArea
+          appStyle={appStyle}
+          value={skeletonValue}
+          contentEditable={false}
+          disabled={true}
+        ></CssTextArea>
+      ) : (
+        <CssTextArea
+          appStyle={appStyle}
+          value={skeletonValueHTML}
+          contentEditable={false}
+          disabled={true}
+        ></CssTextArea>
+      )}
     </Container>
   );
 }
@@ -131,7 +222,11 @@ const mapStateToProps = (state) => ({
   appStyle: state.appStyle,
 });
 
-export default connect(mapStateToProps, null)(GeneratedOutputCSS);
+const mapDispatchToProps = {
+  changeType: (type) => changeType(type),
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(GeneratedOutputCSS);
 
 const Container = styled.div`
   background-color: ${({ isCopied }) => (isCopied ? "#c3e6d6" : "#1d1f21")};
@@ -140,6 +235,8 @@ const Container = styled.div`
   height: 200px;
   border-radius: 8px;
   overflow: hidden;
+  padding: 20px;
+  box-sizing: border-box;
 `;
 
 const CssTextArea = styled.textarea`
@@ -154,4 +251,12 @@ const CssTextArea = styled.textarea`
 const CopyToClipboardButton = styled.button`
   height: 30px;
   padding: 1px 4px 1px 4px;
+`;
+
+const RadioInput = styled.input`
+  accent-color: ${({ appStyle }) => appStyle.SELECTED_COLOR};
+  size: 20px;
+`;
+const TypeText = styled.span`
+  color: ${({ appStyle }) => appStyle.SELECTED_COLOR};
 `;

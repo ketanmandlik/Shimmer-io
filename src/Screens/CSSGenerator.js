@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-target-blank */
 import React, { useCallback } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
@@ -63,6 +64,13 @@ function CSSGenerator(props) {
         dimension={"%"}
       />
       <ColorPicker />
+      <a
+        href="https://codesandbox.io/s/shimmer-builder-demo-dn7t8o"
+        target={"_blank"}
+        className="mb-2"
+      >
+        Click for Demo
+      </a>
       <GeneratedOutputCSS />
     </Container>
   );

@@ -7,6 +7,7 @@ import {
   OBJECT_OPACITY,
   SELECTED_COLOR,
   OBJECT_WIDTH,
+  SELECTED_TYPE,
 } from "./action.type";
 
 export const changeLightTheme = (color) => ({
@@ -47,4 +48,9 @@ export const changeColor = (color) => ({
 export const changeObjectWidth = (width) => ({
   type: OBJECT_WIDTH,
   payload: width,
+});
+
+export const changeType = (type) => ({
+  type: SELECTED_TYPE,
+  payload: type,
 });

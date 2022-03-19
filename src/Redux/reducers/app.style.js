@@ -7,6 +7,7 @@ import {
   OBJECT_WIDTH,
   SELECTED_COLOR,
   SELECT_OBJECT,
+  SELECTED_TYPE,
 } from "../actions/action.type";
 
 /* eslint-disable import/no-anonymous-default-export */
@@ -18,6 +19,7 @@ const initialState = {
   OBJECT_BORDER_RADIUS: "50",
   OBJECT_OPACITY: "100",
   SELECTED_COLOR: "#46B2E0",
+  SELECTED_TYPE: "CSS",
 };
 
 export default (state = initialState, action) => {
@@ -62,6 +64,12 @@ export default (state = initialState, action) => {
       return {
         ...state,
         OBJECT_WIDTH: action.payload,
+      };
+    }
+    case SELECTED_TYPE: {
+      return {
+        ...state,
+        SELECTED_TYPE: action.payload,
       };
     }
     default:
