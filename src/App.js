@@ -14,7 +14,19 @@ const ObjectGenerator = lazy(() => import("./Screens/ObjectGenerator"));
 const CSSGenerator = lazy(() => import("./Screens/CSSGenerator"));
 function App({ appStyle }) {
   return (
-    <Suspense fallback={<div>Loading..........</div>}>
+    <Suspense
+      fallback={
+        <div className="loading text-center">
+          <p>L</p>
+          <p>O</p>
+          <p>A</p>
+          <p>D</p>
+          <p>I</p>
+          <p>N</p>
+          <p>G</p>
+        </div>
+      }
+    >
       <AppContainer appStyle={appStyle}>
         <Header />
         <SelectObject />

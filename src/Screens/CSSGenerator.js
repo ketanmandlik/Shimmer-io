@@ -50,7 +50,7 @@ function CSSGenerator(props) {
           name="Width"
           min={10}
           max={100}
-          dimension={"%"}
+          dimension={"px"}
           changeObject={changeObjectWidth}
           defaultValue={appStyle.OBJECT_WIDTH}
         />

@@ -108,15 +108,15 @@ function GeneratedOutputCSS(props) {
       `
         : `
         .skeleton-text {
-          width: ${appStyle.OBJECT_WIDTH}%;
+          width: ${appStyle.OBJECT_WIDTH}px;
           height: 0.5rem;
           margin-bottom: 0.25rem;
           border-radius: 0.125rem;
-          opacity:${appStyle.OBJECT_OPACITY}%;
+          opacity:${appStyle.OBJECT_OPACITY}px;
         }
         .skeleton-text:last-child {
           margin-bottom: 0;
-          width: ${appStyle.OBJECT_WIDTH - 20}%;
+          width: ${appStyle.OBJECT_WIDTH - 20}px;
         }
         `
     }
