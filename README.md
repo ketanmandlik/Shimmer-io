@@ -11,4 +11,4 @@
 ### [WebDevSimplified/skeleton-loading](https://github.com/WebDevSimplified/skeleton-loading)
 
 # Live Project url:
-### https://shimmer-ui.herokuapp.com/
+### https://shimmer-io.herokuapp.com/
